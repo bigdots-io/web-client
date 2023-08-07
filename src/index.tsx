@@ -82,18 +82,22 @@ function Dot({ y, x }: { y: number; x: number }) {
   );
 }
 
+type MacroNameType = `${MacroName}`;
+
 export function BigdotsClient({
   config,
 }: {
   config: {
-    macroName: MacroName;
-    macroConfig: Partial<MacroConfig>;
+    macroName?: MacroNameType;
+    macroConfig?: Partial<MacroConfig>;
     dimensions: Dimensions;
   };
 }) {
   useEffect(() => {
     createDisplayEngine({
-      ...config,
+      macroName: (config.macroName as MacroName) || MacroName.Text,
+      macroConfig: config.macroConfig || {},
+      dimensions: config.dimensions,
       onPixelChange: updateDot,
     });
   }, []);

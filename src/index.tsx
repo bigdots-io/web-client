@@ -82,10 +82,14 @@ function Dot({ y, x }: { y: number; x: number }) {
   );
 }
 
-export function BigdotsClient(config: {
-  macroName: MacroName;
-  macroConfig: Partial<MacroConfig>;
-  dimensions: Dimensions;
+export function BigdotsClient({
+  config,
+}: {
+  config: {
+    macroName: MacroName;
+    macroConfig: Partial<MacroConfig>;
+    dimensions: Dimensions;
+  };
 }) {
   useEffect(() => {
     createDisplayEngine({

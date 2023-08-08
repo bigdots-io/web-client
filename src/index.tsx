@@ -1,14 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
+  MacroColorConfig,
   MacroConfig,
+  MacroMeteorShowerConfig,
   MacroName,
+  MacroTextConfig,
+  MacroTwinkleConfig,
   Pixel,
 } from "display-engine/lib/types";
 import { createDisplayEngine } from "display-engine";
 
-export function updateDot({ y, x, hex }: Pixel) {
-  var el = document.querySelectorAll(`[data-coordinates='${y}:${x}']`);
+export function updateDot(element: HTMLDivElement, { y, x, hex }: Pixel) {
+  var el = element.querySelectorAll(`[data-coordinates='${y}:${x}']`);
   if (el.length > 0) {
     (el[0] as HTMLElement).style.background = hex === "#000000" ? `#444` : hex;
   }
@@ -84,30 +88,66 @@ function Dot({ y, x }: { y: number; x: number }) {
 
 type MacroNameType = `${MacroName}`;
 
-export function BigdotsClient({
-  config,
+interface Macro {
+  macroName: MacroName;
+  macroConfig: Partial<MacroConfig>;
+}
+
+export const twinkleMacro = (
+  macroConfig: Partial<MacroTwinkleConfig>
+): Macro => ({
+  macroName: MacroName.Twinkle,
+  macroConfig,
+});
+
+export const meteorShowerMacro = (
+  macroConfig: Partial<MacroMeteorShowerConfig>
+): Macro => ({
+  macroName: MacroName.MeteorShower,
+  macroConfig,
+});
+
+export const solidColorMacro = (
+  macroConfig: Partial<MacroColorConfig>
+): Macro => ({
+  macroName: MacroName.SolidColor,
+  macroConfig,
+});
+
+export const textMacro = (macroConfig: Partial<MacroTextConfig>): Macro => ({
+  macroName: MacroName.Text,
+  macroConfig,
+});
+
+export default function BigdotsDisplay({
+  layers,
+  dimensions,
 }: {
-  config: {
-    macroName?: MacroNameType;
-    macroConfig?: Partial<MacroConfig>;
-    dimensions: Dimensions;
-  };
+  layers: Macro[];
+  macroName?: MacroNameType;
+  macroConfig?: Partial<MacroConfig>;
+  dimensions: Dimensions;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     createDisplayEngine({
-      macroName: (config.macroName as MacroName) || MacroName.Text,
-      macroConfig: config.macroConfig || {},
-      dimensions: config.dimensions,
-      onPixelChange: updateDot,
+      macroName: (layers[0].macroName as MacroName) || MacroName.Text,
+      macroConfig: layers[0].macroConfig || {},
+      dimensions: dimensions,
+      onPixelChange: (pixel) => {
+        if (ref.current === null) return;
+        updateDot(ref.current, pixel);
+      },
     });
   }, []);
 
-  const { height, width } = config.dimensions;
+  const { height, width } = dimensions;
 
   var adjustedBrightness = (50 + 100 / 2) / 100;
 
   return (
-    <div style={{ background: "#000" }}>
+    <div ref={ref} style={{ background: "#000" }}>
       {[...Array(height).keys()].map((y) => (
         <Row y={y} opacity={adjustedBrightness} key={`row_${y}`}>
           {[...Array(width).keys()].map((x) => (

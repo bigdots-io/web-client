@@ -1,15 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
-  MacroColorConfig,
   MacroConfig,
-  MacroMeteorShowerConfig,
   MacroName,
-  MacroTextConfig,
-  MacroTwinkleConfig,
   Pixel,
 } from "display-engine/lib/types";
-import { createDisplayEngine } from "display-engine";
+import { createDisplayEngine } from "@bigdots-io/display-engine";
+import { Macro } from "@bigdots-io/display-engine/lib/types";
+
+export {
+  solidColorMacro,
+  textMacro,
+  twinkleMacro,
+  meteorShowerMacro,
+} from "@bigdots-io/display-engine";
 
 export function updateDot(element: HTMLDivElement, { y, x, hex }: Pixel) {
   var el = element.querySelectorAll(`[data-coordinates='${y}:${x}']`);
@@ -88,37 +92,6 @@ function Dot({ y, x }: { y: number; x: number }) {
 
 type MacroNameType = `${MacroName}`;
 
-interface Macro {
-  macroName: MacroName;
-  macroConfig: Partial<MacroConfig>;
-}
-
-export const twinkleMacro = (
-  macroConfig: Partial<MacroTwinkleConfig>
-): Macro => ({
-  macroName: MacroName.Twinkle,
-  macroConfig,
-});
-
-export const meteorShowerMacro = (
-  macroConfig: Partial<MacroMeteorShowerConfig>
-): Macro => ({
-  macroName: MacroName.MeteorShower,
-  macroConfig,
-});
-
-export const solidColorMacro = (
-  macroConfig: Partial<MacroColorConfig>
-): Macro => ({
-  macroName: MacroName.SolidColor,
-  macroConfig,
-});
-
-export const textMacro = (macroConfig: Partial<MacroTextConfig>): Macro => ({
-  macroName: MacroName.Text,
-  macroConfig,
-});
-
 export default function BigdotsDisplay({
   layers,
   dimensions,
@@ -132,8 +105,7 @@ export default function BigdotsDisplay({
 
   useEffect(() => {
     createDisplayEngine({
-      macroName: (layers[0].macroName as MacroName) || MacroName.Text,
-      macroConfig: layers[0].macroConfig || {},
+      macros: layers,
       dimensions: dimensions,
       onPixelChange: (pixel) => {
         if (ref.current === null) return;
@@ -151,7 +123,7 @@ export default function BigdotsDisplay({
       {[...Array(height).keys()].map((y) => (
         <Row y={y} opacity={adjustedBrightness} key={`row_${y}`}>
           {[...Array(width).keys()].map((x) => (
-            <Column y={y} x={x}>
+            <Column y={y} x={x} key={`row_${y}_col_${x}`}>
               <Dot y={y} x={x} />
             </Column>
           ))}

@@ -7,7 +7,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^4.9.5",
-    "display-engine": "bigdots-io/display-engine.git#main"
+    "@bigdots-io/display-engine": "bigdots-io/display-engine.git#main"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

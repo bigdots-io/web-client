@@ -112,7 +112,7 @@ export default function BigdotsDisplay({
         updateDot(ref.current, pixel);
       },
     });
-  }, []);
+  }, [JSON.stringify(layers)]);
 
   const { height, width } = dimensions;
 

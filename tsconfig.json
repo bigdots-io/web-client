@@ -9,7 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "isolatedModules": true,
-    "outDir": "lib",
+    "outDir": "lib/esm",
     "declaration": true,
     "strictPropertyInitialization": false,
     "resolveJsonModule": true,

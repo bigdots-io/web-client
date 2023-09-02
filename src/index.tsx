@@ -4,7 +4,7 @@ import {
   MacroConfig,
   MacroName,
   Pixel,
-} from "display-engine/lib/types";
+} from "@bigdots-io/display-engine/lib/types";
 import { createDisplayEngine } from "@bigdots-io/display-engine";
 import { Macro } from "@bigdots-io/display-engine/lib/types";
 

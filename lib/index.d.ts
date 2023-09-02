@@ -1,5 +1,5 @@
 /// <reference types="react" />
-import { Dimensions, MacroConfig, MacroName, Pixel } from "display-engine/lib/types";
+import { Dimensions, MacroConfig, MacroName, Pixel } from "@bigdots-io/display-engine/lib/types";
 import { Macro } from "@bigdots-io/display-engine/lib/types";
 export { solidColorMacro, textMacro, twinkleMacro, meteorShowerMacro, } from "@bigdots-io/display-engine";
 export declare function updateDot(element: HTMLDivElement, { y, x, hex }: Pixel): void;

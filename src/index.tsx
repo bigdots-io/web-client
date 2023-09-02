@@ -1,24 +1,35 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Dimensions,
+  Macro,
   MacroConfig,
   MacroName,
   Pixel,
-} from "@bigdots-io/display-engine/lib/types";
-import { createDisplayEngine } from "@bigdots-io/display-engine";
-import { Macro } from "@bigdots-io/display-engine/lib/types";
-
-export {
-  solidColorMacro,
-  textMacro,
-  twinkleMacro,
-  meteorShowerMacro,
+} from "@bigdots-io/display-engine/lib/esm/types";
+import {
+  colorLuminance,
+  createDisplayEngine,
 } from "@bigdots-io/display-engine";
 
-export function updateDot(element: HTMLDivElement, { y, x, hex }: Pixel) {
+export {
+  solidColor,
+  text,
+  twinkle,
+  meteorShower,
+  marquee,
+} from "@bigdots-io/display-engine";
+
+export function updateDot(
+  element: HTMLDivElement,
+  { y, x, hex, brightness }: Pixel
+) {
   var el = element.querySelectorAll(`[data-coordinates='${y}:${x}']`);
   if (el.length > 0) {
-    (el[0] as HTMLElement).style.background = hex === "#000000" ? `#444` : hex;
+    if (!hex) return;
+    (el[0] as HTMLElement).style.background = colorLuminance(
+      hex,
+      (brightness * 10) / 100 - 1
+    );
   }
 }
 

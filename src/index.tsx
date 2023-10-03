@@ -17,6 +17,7 @@ export {
   twinkle,
   meteorShower,
   marquee,
+  image
 } from "@bigdots-io/display-engine";
 
 export function updateDot(

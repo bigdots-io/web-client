@@ -17,7 +17,8 @@ export {
   twinkle,
   meteorShower,
   marquee,
-  image
+  image,
+  time,
 } from "@bigdots-io/display-engine";
 
 export function updateDot(
@@ -26,11 +27,13 @@ export function updateDot(
 ) {
   var el = element.querySelectorAll(`[data-coordinates='${y}:${x}']`);
   if (el.length > 0) {
-    if (!hex) return;
-    (el[0] as HTMLElement).style.background = colorLuminance(
-      hex,
-      (brightness * 10) / 100 - 1
-    );
+    const backgroundColor = hex
+      ? ((el[0] as HTMLElement).style.background = colorLuminance(
+          hex,
+          (brightness * 10) / 100 - 1
+        ))
+      : "#444"; // inactive pixel color
+    (el[0] as HTMLElement).style.background = backgroundColor;
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   Macro,
@@ -110,40 +110,64 @@ type MacroNameType = `${MacroName}`;
 export default function BigdotsDisplay({
   layers,
   dimensions,
+  devMode = false,
 }: {
   layers: Macro[];
   macroName?: MacroNameType;
   macroConfig?: Partial<MacroConfig>;
   dimensions: Dimensions;
+  devMode?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
+  const [engine, setEngine] = useState<any>();
+  const [stop, setStop] = useState<any>();
+
   useEffect(() => {
-    createDisplayEngine({
-      macros: layers,
-      dimensions: dimensions,
-      onPixelChange: (pixel) => {
-        if (ref.current === null) return;
-        updateDot(ref.current, pixel);
-      },
-    });
-  }, [JSON.stringify(layers)]);
+    setEngine(
+      createDisplayEngine({
+        dimensions: dimensions,
+        onPixelChange: (pixel) => {
+          if (ref.current === null) return;
+          updateDot(ref.current, pixel);
+        },
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    renderDisplay();
+  }, [engine, JSON.stringify(layers)]);
+
+  const renderDisplay = useCallback(() => {
+    if (!engine) return;
+    const halt = engine?.render(layers);
+    setStop(() => halt);
+  }, [engine, JSON.stringify(layers), setStop]);
 
   const { height, width } = dimensions;
 
   var adjustedBrightness = (50 + 100 / 2) / 100;
 
   return (
-    <div ref={ref} style={{ background: "#000" }}>
-      {[...Array(height).keys()].map((y) => (
-        <Row y={y} opacity={adjustedBrightness} key={`row_${y}`}>
-          {[...Array(width).keys()].map((x) => (
-            <Column y={y} x={x} key={`row_${y}_col_${x}`}>
-              <Dot y={y} x={x} />
-            </Column>
-          ))}
-        </Row>
-      ))}
-    </div>
+    <>
+      <div ref={ref} style={{ background: "#000" }}>
+        {devMode && (
+          <>
+            <button onClick={() => stop()}>Stop</button>
+            <button onClick={() => renderDisplay()}>Reload</button>
+          </>
+        )}
+        {[...Array(height).keys()].map((y) => (
+          <Row y={y} opacity={adjustedBrightness} key={`row_${y}`}>
+            {[...Array(width).keys()].map((x) => (
+              <Column y={y} x={x} key={`row_${y}_col_${x}`}>
+                <Dot y={y} x={x} />
+              </Column>
+            ))}
+          </Row>
+        ))}
+      </div>
+    </>
   );
 }

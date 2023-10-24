@@ -1,6 +1,6 @@
 {
   "name": "@bigdots-io/react-client",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "dependencies": {
     "@bigdots-io/display-engine": "bigdots-io/display-engine.git#v0.6.1",
     "@types/react": "^18.0.27",

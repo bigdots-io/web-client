@@ -127,9 +127,11 @@ export default function BigdotsDisplay({
     setEngine(
       createDisplayEngine({
         dimensions: dimensions,
-        onPixelChange: (pixel) => {
-          if (ref.current === null) return;
-          updateDot(ref.current, pixel);
+        onPixelsChange: (pixels) => {
+          pixels.forEach((pixel) => {
+            if (ref.current === null) return;
+            updateDot(ref.current, pixel);
+          });
         },
       })
     );

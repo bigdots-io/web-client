@@ -2,7 +2,7 @@
   "name": "@bigdots-io/react-client",
   "version": "0.6.4",
   "dependencies": {
-    "@bigdots-io/display-engine": "bigdots-io/display-engine.git#v0.6.6",
+    "@bigdots-io/display-engine": "github:bigdots-io/display-engine#v0.6.6",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "react": "^18.2.0",
@@ -14,5 +14,20 @@
   "type": "module",
   "scripts": {
     "build": "tsc --watch"
-  }
+  },
+  "description": "React client to render and configure a Bigdots Display Engine",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bigdots-io/react-client.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bigdots-io/react-client/issues"
+  },
+  "homepage": "https://github.com/bigdots-io/react-client#readme"
 }
